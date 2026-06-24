@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вікторина для дітей — Червоний Хрест України</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#E63946;
+    --red-dark:#C42A37;
+    --sun:#FFC93C;
+    --sky:#4DA8DA;
+    --mint:#4CC38A;
+    --cream:#FFF8EE;
+    --ink:#3A2E2E;
+    --muted:#9A8C86;
+    --card:#FFFFFF;
+    --line:#FBE6D4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Nunito',system-ui,sans-serif;
+    color:var(--ink);
+    min-height:100dvh;
+    display:flex;align-items:center;justify-content:center;
+    padding:18px;
+    background:
+      radial-gradient(circle at 12% 18%, #FFE3A8 0 14px, transparent 15px),
+      radial-gradient(circle at 88% 12%, #BEE3F8 0 16px, transparent 17px),
+      radial-gradient(circle at 78% 86%, #FCC9CE 0 18px, transparent 19px),
+      radial-gradient(circle at 18% 82%, #C6F0DB 0 14px, transparent 15px),
+      var(--cream);
+  }
+  .wrap{
+    width:100%;max-width:560px;background:var(--card);
+    border:4px solid var(--ink);border-radius:30px;
+    box-shadow:0 10px 0 rgba(58,46,46,.85);
+    overflow:hidden;
+  }
+  .topbar{
+    display:flex;align-items:center;gap:12px;
+    padding:16px 22px;background:var(--red);
+    border-bottom:4px solid var(--ink);
+  }
+  .topbar .badge{
+    width:38px;height:38px;border-radius:11px;background:#fff;
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+    border:3px solid var(--ink);
+  }
+  .topbar .badge svg{display:block}
+  .topbar h2{font-family:'Comfortaa';font-weight:700;font-size:16px;color:#fff;line-height:1.2}
+  .topbar h2 small{display:block;font-family:'Nunito';font-weight:700;font-size:11px;color:#FFE3A8;letter-spacing:.04em;text-transform:uppercase}
+  .stage{padding:26px 26px 30px}
+
+  /* hearts progress */
+  .hearts{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin-bottom:22px}
+  .hearts .h{font-size:19px;filter:grayscale(1) opacity(.35);transition:filter .3s,transform .3s}
+  .hearts .h.on{filter:none;transform:scale(1.18)}
+
+  /* intro */
+  .mascot{display:flex;justify-content:center;margin:4px 0 14px}
+  h1{font-family:'Comfortaa';font-weight:700;font-size:27px;text-align:center;line-height:1.2}
+  .lede{text-align:center;color:var(--muted);font-size:16px;line-height:1.55;margin:14px auto 24px;max-width:400px;font-weight:600}
+
+  .qnum{font-family:'Comfortaa';font-weight:700;font-size:13px;color:var(--red);text-align:center;margin-bottom:8px}
+  .qtext{font-family:'Comfortaa';font-weight:700;font-size:21px;line-height:1.35;text-align:center;margin-bottom:22px}
+  .opts{display:flex;flex-direction:column;gap:12px}
+  .opt{
+    display:flex;align-items:center;gap:13px;width:100%;text-align:left;
+    padding:16px 18px;background:var(--cream);
+    border:3px solid var(--ink);border-radius:18px;
+    font-family:'Nunito';font-weight:700;font-size:17px;color:var(--ink);
+    cursor:pointer;transition:transform .12s,background .15s;
+    box-shadow:0 4px 0 rgba(58,46,46,.85);
+  }
+  .opt:hover:not(:disabled){transform:translateY(-2px)}
+  .opt:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 rgba(58,46,46,.85)}
+  .opt:focus-visible{outline:4px solid var(--sky);outline-offset:3px}
+  .opt:disabled{cursor:default}
+  .emoji{font-size:24px;flex:0 0 auto}
+  .opt.correct{background:#DDF6E8;border-color:var(--mint)}
+  .opt.wrong{background:#FCE0E2;border-color:var(--red)}
+
+  .explain{
+    margin-top:18px;padding:16px 18px;border-radius:18px;
+    background:#FFF6DD;border:3px solid var(--sun);
+    font-size:15.5px;font-weight:600;line-height:1.5;display:none;
+  }
+  .explain.show{display:block;animation:pop .35s cubic-bezier(.3,1.4,.5,1)}
+  @keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    font-family:'Comfortaa';font-weight:700;font-size:17px;width:100%;
+    padding:16px 24px;border-radius:18px;border:3px solid var(--ink);
+    background:var(--sun);color:var(--ink);cursor:pointer;
+    box-shadow:0 5px 0 rgba(58,46,46,.85);transition:transform .12s,box-shadow .12s;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 7px 0 rgba(58,46,46,.85)}
+  .btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(58,46,46,.85)}
+  .btn:focus-visible{outline:4px solid var(--sky);outline-offset:3px}
+  .btn.red{background:var(--red);color:#fff}
+  .btn.next{margin-top:20px;display:none}
+  .btn.next.show{display:flex;animation:pop .35s cubic-bezier(.3,1.4,.5,1)}
+
+  /* result */
+  .res-mascot{display:flex;justify-content:center;margin:4px 0 12px}
+  .big-hearts{text-align:center;font-size:30px;margin-bottom:6px;letter-spacing:2px}
+  .score-line{font-family:'Comfortaa';font-weight:700;font-size:18px;text-align:center;color:var(--red)}
+  .tier{font-family:'Comfortaa';font-weight:700;font-size:23px;text-align:center;margin:12px 0 8px}
+  .tier-msg{text-align:center;color:var(--muted);font-weight:600;font-size:16px;line-height:1.55;max-width:400px;margin:0 auto 22px}
+  @media (max-width:500px){
+    .stage{padding:22px 18px 26px}
+    h1{font-size:24px}
+    .qtext{font-size:19px}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span class="badge" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 22 22"><path d="M8.5 2h5v4.5H18v5h-4.5V16h-5v-4.5H4v-5h4.5z" fill="#E63946"/></svg>
+    </span>
+    <h2>Добрі справи<small>Вікторина для дітей · Червоний Хрест</small></h2>
+  </div>
+  <div class="stage" id="stage"></div>
+</div>
+
+<script>
+// Friendly mascot: a round helper with a red-cross badge
+function mascot(size){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 120 120" aria-hidden="true">
+    <circle cx="60" cy="62" r="46" fill="#FFD8A8" stroke="#3A2E2E" stroke-width="4"/>
+    <circle cx="46" cy="56" r="5.5" fill="#3A2E2E"/>
+    <circle cx="74" cy="56" r="5.5" fill="#3A2E2E"/>
+    <circle cx="40" cy="68" r="6" fill="#FFB3BA" opacity=".7"/>
+    <circle cx="80" cy="68" r="6" fill="#FFB3BA" opacity=".7"/>
+    <path d="M50 74q10 9 20 0" stroke="#3A2E2E" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <rect x="44" y="92" width="32" height="22" rx="6" fill="#E63946" stroke="#3A2E2E" stroke-width="4"/>
+    <path d="M57 96h6v3h3v6h-3v3h-6v-3h-3v-6h3z" fill="#fff"/>
+  </svg>`;
+}
+
+const QUESTIONS = [
+  {
+    q:"Який значок у Червоного Хреста?",
+    opts:[["❤️","Червоне серце в колі"],["➕","Червоний хрест на білому"],["⭐","Жовта зірочка"]],
+    a:1,
+    e:"Так! Червоний хрест на білому тлі — це знак допомоги. Коли ти його бачиш, поруч ті, хто прийде на поміч."
+  },
+  {
+    q:"Що найголовніше роблять у Червоному Хресті?",
+    opts:[["🤝","Допомагають людям"],["🎮","Грають в ігри"],["🛒","Продають іграшки"]],
+    a:0,
+    e:"Правильно! Головна справа — допомагати тим, кому важко, і бути добрими до всіх."
+  },
+  {
+    q:"Хто такий волонтер?",
+    opts:[["💼","Той, хто працює за гроші"],["💗","Той, хто допомагає від щирого серця"],["👑","Той, хто всім командує"]],
+    a:1,
+    e:"Так! Волонтер допомагає іншим тому, що хоче робити добро — а не заради грошей."
+  },
+  {
+    q:"Кому допомагає Червоний Хрест?",
+    opts:[["🧒","Тільки дітям"],["👵","Тільки дорослим"],["🌍","Усім: дітям, дорослим і навіть тваринам"]],
+    a:2,
+    e:"Точно! Допомога потрібна всім. Червоний Хрест навіть навчає, як допомогти домашнім улюбленцям!"
+  },
+  {
+    q:"Твій друг упав і подряпав коліно. Що зробиш?",
+    opts:[["🏃","Втечу подалі"],["🩹","Допоможу і покличу дорослого"],["😴","Удам, що не бачив"]],
+    a:1,
+    e:"Молодець! Допомогти й покликати дорослого — це найкраще, що можна зробити. Це і є перша допомога."
+  },
+  {
+    q:"Перша допомога — це...",
+    opts:[["🧁","Перший шматок торта"],["🚑","Коли швидко допомагаєш, поки прийде лікар"],["🥇","Перше місце в грі"]],
+    a:1,
+    e:"Так! Перша допомога — це коли поруч хтось подбав про тебе одразу, не чекаючи. Цьому навчають у Червоному Хресті."
+  },
+  {
+    q:"Дорослі можуть подарувати щось своє, щоб урятувати чиєсь життя. Що це?",
+    opts:[["🩸","Трохи своєї крові"],["💰","Гроші"],["🚗","Свою машину"]],
+    a:0,
+    e:"Правильно! Дорослі здають кров — і вона допомагає врятувати хворих та поранених. Це справжній подарунок життя."
+  },
+  {
+    q:"Коли Червоний Хрест поспішає на допомогу?",
+    opts:[["🎉","На дні народження"],["⛈️","Коли сталася біда — пожежа, повінь чи буря"],["📺","Коли йде мультик"]],
+    a:1,
+    e:"Так! Коли трапляється лихо, команди Червоного Хреста першими приходять допомогти людям."
+  },
+  {
+    q:"Яке слово найкраще описує Червоний Хрест?",
+    opts:[["😠","Сварка"],["💛","Доброта"],["😴","Нудьга"]],
+    a:1,
+    e:"Саме так! Доброта, турбота й допомога — це про Червоний Хрест."
+  },
+  {
+    q:"Як ти теж можеш бути маленьким помічником?",
+    opts:[["💞","Бути добрим і допомагати іншим"],["🙉","Нікого не помічати"],["😈","Дражнити друзів"]],
+    a:0,
+    e:"Найкраща відповідь! Добрі справи може робити кожен — навіть найменший. Поділись, підтримай, допоможи."
+  }
+];
+
+const TIERS = [
+  {min:0, name:"Маленький помічник 🌱", msg:"Ти вже знаєш про доброту! А ще трохи — і станеш справжнім знавцем добрих справ."},
+  {min:5, name:"Юний рятівник 🦸", msg:"Чудово! Ти знаєш, як допомагати іншим і бути добрим другом."},
+  {min:8, name:"Супергерой доброти 🌟", msg:"Ого! Ти справжній герой добрих справ. Червоний Хрест пишався б тобою!"}
+];
+
+const stage = document.getElementById('stage');
+let idx=0, score=0, answered=false;
+
+function heartsBar(){
+  let h='';
+  for(let i=0;i<QUESTIONS.length;i++){
+    h+=`<span class="h ${i<score?'on':''}">❤️</span>`;
+  }
+  return `<div class="hearts">${h}</div>`;
+}
+
+function renderIntro(){
+  stage.innerHTML = `
+    <div class="mascot">${mascot(110)}</div>
+    <h1>Добрі справи!</h1>
+    <p class="lede">Привіт! Я твій помічник. Пограймо у вікторину про доброту й допомогу — за кожну правильну відповідь ти отримаєш сердечко ❤️</p>
+    <button class="btn red" id="start">Поїхали! 🚀</button>
+  `;
+  document.getElementById('start').onclick=()=>{idx=0;score=0;renderQuestion();};
+}
+
+function renderQuestion(){
+  answered=false;
+  const item=QUESTIONS[idx];
+  stage.innerHTML = `
+    ${heartsBar()}
+    <div class="qnum">Питання ${idx+1} з ${QUESTIONS.length}</div>
+    <div class="qtext">${item.q}</div>
+    <div class="opts" id="opts">
+      ${item.opts.map((o,i)=>`
+        <button class="opt" data-i="${i}">
+          <span class="emoji">${o[0]}</span><span>${o[1]}</span>
+        </button>`).join('')}
+    </div>
+    <div class="explain" id="explain"></div>
+    <button class="btn next" id="next"></button>
+  `;
+  document.querySelectorAll('.opt').forEach(b=>{
+    b.onclick=()=>choose(parseInt(b.dataset.i));
+  });
+}
+
+function choose(i){
+  if(answered) return;
+  answered=true;
+  const item=QUESTIONS[idx];
+  document.querySelectorAll('.opt').forEach(b=>{
+    const bi=parseInt(b.dataset.i);
+    b.disabled=true;
+    if(bi===item.a) b.classList.add('correct');
+    else if(bi===i) b.classList.add('wrong');
+  });
+  const ex=document.getElementById('explain');
+  if(i===item.a){
+    score++;
+    ex.innerHTML='🎉 '+item.e;
+    const hearts=document.querySelectorAll('.hearts .h');
+    if(hearts[score-1]) hearts[score-1].classList.add('on');
+  } else {
+    ex.innerHTML='🤗 Майже! '+item.e;
+  }
+  ex.classList.add('show');
+  const next=document.getElementById('next');
+  next.textContent = idx===QUESTIONS.length-1 ? 'Мій результат! 🏆' : 'Далі →';
+  next.classList.add('show');
+  next.onclick=()=>{
+    idx++;
+    if(idx>=QUESTIONS.length) renderResult();
+    else renderQuestion();
+  };
+}
+
+function renderResult(){
+  let tier=TIERS[0];
+  for(const t of TIERS) if(score>=t.min) tier=t;
+  let hearts='';
+  for(let i=0;i<score;i++) hearts+='❤️';
+  if(!hearts) hearts='🌱';
+  stage.innerHTML = `
+    <div class="res-mascot">${mascot(100)}</div>
+    <div class="big-hearts">${hearts}</div>
+    <div class="score-line">Ти зібрав ${score} ${score===1?'сердечко':(score>=2&&score<=4?'сердечка':'сердечок')}!</div>
+    <div class="tier">${tier.name}</div>
+    <p class="tier-msg">${tier.msg}</p>
+    <button class="btn" id="again">Зіграти ще раз ↺</button>
+  `;
+  document.getElementById('again').onclick=renderIntro;
+}
+
+renderIntro();
+</script>
+</body>
+</html>
